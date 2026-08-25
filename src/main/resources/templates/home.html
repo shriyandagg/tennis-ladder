@@ -8,9 +8,9 @@
     <h1>Tennis Ladder</h1>
 
     <ol>
-        <li th:each="player : ${players}"
-            th:text="${player}">
-        </li>
-    </ol>
+    <li th:each="player : ${players}">
+        <span th:text="${player.name}"></span>
+    </li>
+</ol>
 </body>
 </html>
