@@ -6,6 +6,10 @@
 </head>
 <body>
     <h1>Tennis Ladder</h1>
+    
+    <p>
+    <a th:href="@{/players/new}">Add Player</a>
+    </p>
 
     <ol>
     <li th:each="player : ${players}">

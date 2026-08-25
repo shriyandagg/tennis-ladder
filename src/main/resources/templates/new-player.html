@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Player</title>
+</head>
+<body>
+    <h1>Add Player</h1>
+
+    <form th:action="@{/players}" th:object="${player}" method="post">
+        <label for="name">Player name:</label>
+
+        <input
+            id="name"
+            type="text"
+            th:field="*{name}"
+            required
+        >
+
+        <button type="submit">Add Player</button>
+    </form>
+
+    <p>
+        <a th:href="@{/}">Back to ladder</a>
+    </p>
+</body>
+</html>

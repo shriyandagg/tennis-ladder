@@ -34,4 +34,12 @@ public class Player {
     public int getLadderPosition() {
         return ladderPosition;
     }
+
+    public void setName(String name) {
+    this.name = name;
+    }   
+
+    public void setLadderPosition(int ladderPosition) {
+    this.ladderPosition = ladderPosition;
+    }
 }
