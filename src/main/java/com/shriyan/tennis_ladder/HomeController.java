@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import com.shriyan.tennis_ladder.repository.ChallengeRepository;
 
 import com.shriyan.tennis_ladder.model.Player;
 import com.shriyan.tennis_ladder.repository.PlayerRepository;
@@ -13,9 +14,13 @@ import com.shriyan.tennis_ladder.repository.PlayerRepository;
 public class HomeController {
 
     private final PlayerRepository playerRepository;
+    private final ChallengeRepository challengeRepository;
 
-    public HomeController(PlayerRepository playerRepository) {
-        this.playerRepository = playerRepository;
+    public HomeController(
+        PlayerRepository playerRepository,
+        ChallengeRepository challengeRepository) {
+    this.playerRepository = playerRepository;
+    this.challengeRepository = challengeRepository;
     }
 
     @GetMapping("/")
@@ -23,6 +28,10 @@ public class HomeController {
         model.addAttribute(
             "players",
             playerRepository.findAllByOrderByLadderPositionAsc()
+        );
+        model.addAttribute(
+        "challenges",
+        challengeRepository.findAllByOrderByCreatedAtDesc()
         );
 
         return "home";

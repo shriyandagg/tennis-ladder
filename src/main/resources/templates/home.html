@@ -4,17 +4,42 @@
     <meta charset="UTF-8">
     <title>Tennis Ladder</title>
 </head>
+
 <body>
     <h1>Tennis Ladder</h1>
-    
+
     <p>
-    <a th:href="@{/players/new}">Add Player</a>
+        <a href="/challenges/new">Request a Challenge</a>
+        |
+        <a href="/coach">Coach Dashboard</a>
     </p>
 
+    <h2>Current Rankings</h2>
+
     <ol>
-    <li th:each="player : ${players}">
-        <span th:text="${player.name}"></span>
-    </li>
-</ol>
+        <li th:each="player : ${players}">
+            <span th:text="${player.name}"></span>
+        </li>
+    </ol>
+
+    <p>
+        <a href="/players/new">Add Player</a>
+    </p>
+
+    <h2>Challenge Progress</h2>
+
+    <p th:if="${challenges.isEmpty()}">
+        No challenges have been requested.
+    </p>
+
+    <div th:each="challenge : ${challenges}">
+        <p>
+            <strong th:text="${challenge.challenger.name}"></strong>
+            challenged
+            <strong th:text="${challenge.opponent.name}"></strong>
+            —
+            <span th:text="${challenge.status}"></span>
+        </p>
+    </div>
 </body>
 </html>

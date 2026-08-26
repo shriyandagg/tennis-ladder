@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Request a Challenge</title>
+</head>
+<body>
+    <h1>Request a Challenge</h1>
+
+    <p th:if="${error}" th:text="${error}"></p>
+
+    <form action="/challenges" method="post">
+        <label for="challengerId">Your name:</label>
+
+        <select id="challengerId" name="challengerId" required>
+            <option value="">Select a player</option>
+
+            <option
+                th:each="player : ${players}"
+                th:value="${player.id}"
+                th:text="${player.ladderPosition + '. ' + player.name}">
+            </option>
+        </select>
+
+        <br><br>
+
+        <label for="opponentId">Opponent:</label>
+
+        <select id="opponentId" name="opponentId" required>
+            <option value="">Select an opponent</option>
+
+            <option
+                th:each="player : ${players}"
+                th:value="${player.id}"
+                th:text="${player.ladderPosition + '. ' + player.name}">
+            </option>
+        </select>
+
+        <br><br>
+
+        <button type="submit">Send Request to Coach</button>
+    </form>
+
+    <p>
+        You may challenge someone ranked up to three positions above you.
+    </p>
+
+    <a href="/">Back to player view</a>
+</body>
+</html>

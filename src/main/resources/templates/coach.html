@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Coach Dashboard</title>
+</head>
+<body>
+    <h1>Coach Dashboard</h1>
+
+    <a href="/">Go to player view</a>
+
+    <h2>Challenge Requests</h2>
+
+    <p th:if="${challenges.isEmpty()}">
+        There are no challenge requests.
+    </p>
+
+    <div th:each="challenge : ${challenges}">
+        <h3>
+            <span th:text="${challenge.challenger.name}"></span>
+            challenged
+            <span th:text="${challenge.opponent.name}"></span>
+        </h3>
+
+        <p>
+            Status:
+            <strong th:text="${challenge.status}"></strong>
+        </p>
+
+        <div th:if="${challenge.status.name() == 'PENDING_COACH_APPROVAL'}">
+            <form
+                th:action="@{/challenges/{id}/approve(id=${challenge.id})}"
+                method="post">
+                <button type="submit">Approve</button>
+            </form>
+
+            <form
+                th:action="@{/challenges/{id}/reject(id=${challenge.id})}"
+                method="post">
+                <button type="submit">Reject</button>
+            </form>
+        </div>
+
+        <hr>
+    </div>
+</body>
+</html>
