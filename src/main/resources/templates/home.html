@@ -26,13 +26,13 @@
         <a href="/players/new">Add Player</a>
     </p>
 
-    <h2>Challenge Progress</h2>
+    <h2>Active Challenges</h2>
 
-    <p th:if="${challenges.isEmpty()}">
-        No challenges have been requested.
+    <p th:if="${activeChallenges.isEmpty()}">
+        There are no active challenges.
     </p>
 
-    <div th:each="challenge : ${challenges}">
+    <div th:each="challenge : ${activeChallenges}">
         <p>
             <strong th:text="${challenge.challenger.name}"></strong>
             challenged
@@ -40,6 +40,32 @@
             —
             <span th:text="${challenge.status}"></span>
         </p>
+    </div>
+
+    <h2>Match History</h2>
+
+    <p th:if="${matchHistory.isEmpty()}">
+        No matches have been completed.
+    </p>
+
+    <div th:each="challenge : ${matchHistory}">
+        <p>
+            <strong th:text="${challenge.challenger.name}"></strong>
+            vs.
+            <strong th:text="${challenge.opponent.name}"></strong>
+        </p>
+
+        <p>
+            Winner:
+            <strong th:text="${challenge.winner.name}"></strong>
+        </p>
+
+        <p>
+            Score:
+            <span th:text="${challenge.score}"></span>
+        </p>
+
+        <hr>
     </div>
 </body>
 </html>

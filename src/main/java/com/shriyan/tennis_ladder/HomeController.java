@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import com.shriyan.tennis_ladder.repository.ChallengeRepository;
-
+import com.shriyan.tennis_ladder.model.ChallengeStatus;
 import com.shriyan.tennis_ladder.model.Player;
 import com.shriyan.tennis_ladder.repository.PlayerRepository;
 
@@ -30,8 +30,19 @@ public class HomeController {
             playerRepository.findAllByOrderByLadderPositionAsc()
         );
         model.addAttribute(
-        "challenges",
-        challengeRepository.findAllByOrderByCreatedAtDesc()
+        "activeChallenges",
+        challengeRepository
+                .findAllByStatusNotOrderByCreatedAtDesc(
+                        ChallengeStatus.COMPLETED
+                )
+        );
+
+        model.addAttribute(
+        "matchHistory",
+        challengeRepository
+                .findAllByStatusOrderByCompletedAtDesc(
+                        ChallengeStatus.COMPLETED
+                )
         );
 
         return "home";

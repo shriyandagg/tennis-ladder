@@ -1,5 +1,5 @@
 package com.shriyan.tennis_ladder;
-
+import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +14,6 @@ import com.shriyan.tennis_ladder.model.Player;
 import com.shriyan.tennis_ladder.repository.ChallengeRepository;
 import com.shriyan.tennis_ladder.repository.PlayerRepository;
 import com.shriyan.tennis_ladder.service.LadderService;
-
 @Controller
 public class ChallengeController {
 
@@ -65,6 +64,14 @@ public class ChallengeController {
                     "A player cannot challenge themselves."
             );
 
+    
+            return "redirect:/challenges/new";
+        }
+        if (hasActiveChallenge(challenger) || hasActiveChallenge(opponent)) {
+            redirectAttributes.addFlashAttribute(
+                    "error",
+                    "One of these players already has an active challenge."
+            );
             return "redirect:/challenges/new";
         }
 
@@ -160,6 +167,18 @@ public class ChallengeController {
 
         return "redirect:/coach";
     }
+
+    private boolean hasActiveChallenge(Player player) {
+    List<ChallengeStatus> activeStatuses = List.of(
+            ChallengeStatus.PENDING_COACH_APPROVAL,
+            ChallengeStatus.APPROVED
+    );
+
+    return challengeRepository
+            .existsByChallengerAndStatusIn(player, activeStatuses)
+            || challengeRepository
+            .existsByOpponentAndStatusIn(player, activeStatuses);
+}
 
     private Challenge findChallenge(Long id) {
         return challengeRepository.findById(id)
