@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Record Match Result</title>
+</head>
+
+<body>
+    <h1>Record Match Result</h1>
+
+    <p>
+        <strong th:text="${challenge.challenger.name}"></strong>
+        vs.
+        <strong th:text="${challenge.opponent.name}"></strong>
+    </p>
+
+    <form
+        th:action="@{/challenges/{id}/result(id=${challenge.id})}"
+        method="post">
+
+        <label for="winnerId">Winner:</label>
+
+        <select id="winnerId" name="winnerId" required>
+            <option value="">Select the winner</option>
+
+            <option
+                th:value="${challenge.challenger.id}"
+                th:text="${challenge.challenger.name}">
+            </option>
+
+            <option
+                th:value="${challenge.opponent.id}"
+                th:text="${challenge.opponent.name}">
+            </option>
+        </select>
+
+        <br><br>
+
+        <label for="score">Score:</label>
+
+        <input
+            id="score"
+            name="score"
+            type="text"
+            placeholder="Example: 6-4, 6-3"
+            required>
+
+        <br><br>
+
+        <button type="submit">Save Result</button>
+    </form>
+
+    <p>
+        <a href="/coach">Cancel</a>
+    </p>
+</body>
+</html>

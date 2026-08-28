@@ -28,10 +28,16 @@ public class Challenge {
     @JoinColumn(name = "opponent_id", nullable = false)
     private Player opponent;
 
+    @ManyToOne
+    @JoinColumn(name = "winner_id")
+    private Player winner;
+
     @Enumerated(EnumType.STRING)
     private ChallengeStatus status;
 
+    private String score;
     private LocalDateTime createdAt;
+    private LocalDateTime completedAt;
 
     public Challenge() {
     }
@@ -41,6 +47,13 @@ public class Challenge {
         this.opponent = opponent;
         this.status = ChallengeStatus.PENDING_COACH_APPROVAL;
         this.createdAt = LocalDateTime.now();
+    }
+
+    public void complete(Player winner, String score) {
+        this.winner = winner;
+        this.score = score;
+        this.status = ChallengeStatus.COMPLETED;
+        this.completedAt = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -55,12 +68,24 @@ public class Challenge {
         return opponent;
     }
 
+    public Player getWinner() {
+        return winner;
+    }
+
     public ChallengeStatus getStatus() {
         return status;
     }
 
+    public String getScore() {
+        return score;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public LocalDateTime getCompletedAt() {
+        return completedAt;
     }
 
     public void setStatus(ChallengeStatus status) {

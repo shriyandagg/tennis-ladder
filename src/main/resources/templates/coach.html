@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <title>Coach Dashboard</title>
 </head>
+
 <body>
     <h1>Coach Dashboard</h1>
 
-    <a href="/">Go to player view</a>
+    <p>
+        <a href="/">Go to Player View</a>
+    </p>
 
     <h2>Challenge Requests</h2>
 
@@ -27,7 +30,9 @@
             <strong th:text="${challenge.status}"></strong>
         </p>
 
-        <div th:if="${challenge.status.name() == 'PENDING_COACH_APPROVAL'}">
+        <div th:if="${challenge.status.name()
+                == 'PENDING_COACH_APPROVAL'}">
+
             <form
                 th:action="@{/challenges/{id}/approve(id=${challenge.id})}"
                 method="post">
@@ -39,6 +44,33 @@
                 method="post">
                 <button type="submit">Reject</button>
             </form>
+        </div>
+
+        <div th:if="${challenge.status.name() == 'APPROVED'}">
+            <p>
+                The players may now arrange and play their match.
+            </p>
+
+            <a
+                th:href="@{/challenges/{id}/result(id=${challenge.id})}">
+                Enter Match Result
+            </a>
+        </div>
+
+        <div th:if="${challenge.status.name() == 'REJECTED'}">
+            <p>This challenge was rejected.</p>
+        </div>
+
+        <div th:if="${challenge.status.name() == 'COMPLETED'}">
+            <p>
+                Winner:
+                <strong th:text="${challenge.winner.name}"></strong>
+            </p>
+
+            <p>
+                Score:
+                <span th:text="${challenge.score}"></span>
+            </p>
         </div>
 
         <hr>

@@ -13,18 +13,22 @@ import com.shriyan.tennis_ladder.model.ChallengeStatus;
 import com.shriyan.tennis_ladder.model.Player;
 import com.shriyan.tennis_ladder.repository.ChallengeRepository;
 import com.shriyan.tennis_ladder.repository.PlayerRepository;
+import com.shriyan.tennis_ladder.service.LadderService;
 
 @Controller
 public class ChallengeController {
 
     private final ChallengeRepository challengeRepository;
     private final PlayerRepository playerRepository;
+    private final LadderService ladderService;
 
     public ChallengeController(
             ChallengeRepository challengeRepository,
-            PlayerRepository playerRepository) {
+            PlayerRepository playerRepository,
+            LadderService ladderService) {
         this.challengeRepository = challengeRepository;
         this.playerRepository = playerRepository;
+        this.ladderService = ladderService;
     }
 
     @GetMapping("/challenges/new")
@@ -44,28 +48,33 @@ public class ChallengeController {
             RedirectAttributes redirectAttributes) {
 
         Player challenger = playerRepository.findById(challengerId)
-                .orElseThrow(() -> new IllegalArgumentException(
-                        "Challenger not found"
-                ));
+                .orElseThrow(() ->
+                        new IllegalArgumentException(
+                                "Challenger not found"
+                        ));
 
         Player opponent = playerRepository.findById(opponentId)
-                .orElseThrow(() -> new IllegalArgumentException(
-                        "Opponent not found"
-                ));
+                .orElseThrow(() ->
+                        new IllegalArgumentException(
+                                "Opponent not found"
+                        ));
 
         if (challenger.getId().equals(opponent.getId())) {
             redirectAttributes.addFlashAttribute(
                     "error",
                     "A player cannot challenge themselves."
             );
+
             return "redirect:/challenges/new";
         }
 
-        if (opponent.getLadderPosition() >= challenger.getLadderPosition()) {
+        if (opponent.getLadderPosition()
+                >= challenger.getLadderPosition()) {
             redirectAttributes.addFlashAttribute(
                     "error",
                     "You must challenge a player ranked above you."
             );
+
             return "redirect:/challenges/new";
         }
 
@@ -78,6 +87,7 @@ public class ChallengeController {
                     "error",
                     "You can only challenge up to three positions above you."
             );
+
             return "redirect:/challenges/new";
         }
 
@@ -88,24 +98,35 @@ public class ChallengeController {
         return "redirect:/";
     }
 
-    @PostMapping("/challenges/{id}/approve")
-    public String approveChallenge(@PathVariable Long id) { 
-    Challenge challenge = findChallenge(id);
+    @GetMapping("/coach")
+    public String showCoachDashboard(Model model) {
+        model.addAttribute(
+                "challenges",
+                challengeRepository.findAllByOrderByCreatedAtDesc()
+        );
 
-    if (challenge.getStatus()
-            == ChallengeStatus.PENDING_COACH_APPROVAL) {
-        challenge.setStatus(ChallengeStatus.APPROVED);
-        challengeRepository.save(challenge);
+        return "coach";
     }
 
-    return "redirect:/coach";
-}
+    @PostMapping("/challenges/{id}/approve")
+    public String approveChallenge(@PathVariable Long id) {
+        Challenge challenge = findChallenge(id);
+
+        if (challenge.getStatus()
+                == ChallengeStatus.PENDING_COACH_APPROVAL) {
+            challenge.setStatus(ChallengeStatus.APPROVED);
+            challengeRepository.save(challenge);
+        }
+
+        return "redirect:/coach";
+    }
 
     @PostMapping("/challenges/{id}/reject")
     public String rejectChallenge(@PathVariable Long id) {
         Challenge challenge = findChallenge(id);
 
-        if (challenge.getStatus() == ChallengeStatus.PENDING_COACH_APPROVAL) {
+        if (challenge.getStatus()
+                == ChallengeStatus.PENDING_COACH_APPROVAL) {
             challenge.setStatus(ChallengeStatus.REJECTED);
             challengeRepository.save(challenge);
         }
@@ -113,20 +134,38 @@ public class ChallengeController {
         return "redirect:/coach";
     }
 
-    @GetMapping("/coach")
-    public String showCoachDashboard(Model model) {
-    model.addAttribute(
-            "challenges",
-            challengeRepository.findAllByOrderByCreatedAtDesc()
-    );
+    @GetMapping("/challenges/{id}/result")
+    public String showResultForm(
+            @PathVariable Long id,
+            Model model) {
 
-    return "coach";
+        Challenge challenge = findChallenge(id);
+
+        if (challenge.getStatus() != ChallengeStatus.APPROVED) {
+            return "redirect:/coach";
+        }
+
+        model.addAttribute("challenge", challenge);
+
+        return "record-result";
+    }
+
+    @PostMapping("/challenges/{id}/result")
+    public String recordResult(
+            @PathVariable Long id,
+            @RequestParam Long winnerId,
+            @RequestParam String score) {
+
+        ladderService.recordResult(id, winnerId, score);
+
+        return "redirect:/coach";
     }
 
     private Challenge findChallenge(Long id) {
         return challengeRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(
-                        "Challenge not found"
-                ));
+                .orElseThrow(() ->
+                        new IllegalArgumentException(
+                                "Challenge not found"
+                        ));
     }
 }
