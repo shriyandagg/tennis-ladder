@@ -2,56 +2,77 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Record Match Result</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
 <body>
-    <h1>Record Match Result</h1>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a class="brand" href="/">Tennis Ladder</a>
 
-    <p>
-        <strong th:text="${challenge.challenger.name}"></strong>
-        vs.
-        <strong th:text="${challenge.opponent.name}"></strong>
-    </p>
+            <div class="nav-links">
+                <a href="/">Player Dashboard</a>
+                <a href="/coach">Coach Dashboard</a>
+            </div>
+        </div>
+    </nav>
 
-    <form
-        th:action="@{/challenges/{id}/result(id=${challenge.id})}"
-        method="post">
+    <main class="form-card card">
+        <h1>Record Match Result</h1>
 
-        <label for="winnerId">Winner:</label>
+        <p class="challenge-title">
+            <span th:text="${challenge.challenger.name}"></span>
+            vs.
+            <span th:text="${challenge.opponent.name}"></span>
+        </p>
 
-        <select id="winnerId" name="winnerId" required>
-            <option value="">Select the winner</option>
+        <form
+            th:action="@{/challenges/{id}/result(
+                id=${challenge.id})}"
+            method="post">
 
-            <option
-                th:value="${challenge.challenger.id}"
-                th:text="${challenge.challenger.name}">
-            </option>
+            <div class="form-group">
+                <label for="winnerId">Winner</label>
 
-            <option
-                th:value="${challenge.opponent.id}"
-                th:text="${challenge.opponent.name}">
-            </option>
-        </select>
+                <select id="winnerId"
+                        name="winnerId"
+                        required>
+                    <option value="">Select the winner</option>
 
-        <br><br>
+                    <option
+                        th:value="${challenge.challenger.id}"
+                        th:text="${challenge.challenger.name}">
+                    </option>
 
-        <label for="score">Score:</label>
+                    <option
+                        th:value="${challenge.opponent.id}"
+                        th:text="${challenge.opponent.name}">
+                    </option>
+                </select>
+            </div>
 
-        <input
-            id="score"
-            name="score"
-            type="text"
-            placeholder="Example: 6-4, 6-3"
-            required>
+            <div class="form-group">
+                <label for="score">Final score</label>
 
-        <br><br>
+                <input id="score"
+                       name="score"
+                       type="text"
+                       placeholder="Example: 6-4 6-3"
+                       required>
+            </div>
 
-        <button type="submit">Save Result</button>
-    </form>
+            <div class="action-row">
+                <button class="button" type="submit">
+                    Save Result
+                </button>
 
-    <p>
-        <a href="/coach">Cancel</a>
-    </p>
+                <a class="button button-secondary" href="/coach">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </main>
 </body>
 </html>

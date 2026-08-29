@@ -2,49 +2,80 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Request a Challenge</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
-    <h1>Request a Challenge</h1>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a class="brand" href="/">Tennis Ladder</a>
 
-    <p th:if="${error}" th:text="${error}"></p>
+            <div class="nav-links">
+                <a href="/">Player Dashboard</a>
+                <a href="/coach">Coach Dashboard</a>
+            </div>
+        </div>
+    </nav>
 
-    <form action="/challenges" method="post">
-        <label for="challengerId">Your name:</label>
+    <main class="form-card card">
+        <h1>Request a Challenge</h1>
 
-        <select id="challengerId" name="challengerId" required>
-            <option value="">Select a player</option>
+        <p class="match-details">
+            You may challenge someone ranked up to three positions above you.
+        </p>
 
-            <option
-                th:each="player : ${players}"
-                th:value="${player.id}"
-                th:text="${player.ladderPosition + '. ' + player.name}">
-            </option>
-        </select>
+        <p class="error-message"
+           th:if="${error}"
+           th:text="${error}">
+        </p>
 
-        <br><br>
+        <form action="/challenges" method="post">
+            <div class="form-group">
+                <label for="challengerId">Your name</label>
 
-        <label for="opponentId">Opponent:</label>
+                <select id="challengerId"
+                        name="challengerId"
+                        required>
+                    <option value="">Select a player</option>
 
-        <select id="opponentId" name="opponentId" required>
-            <option value="">Select an opponent</option>
+                    <option
+                        th:each="player : ${players}"
+                        th:value="${player.id}"
+                        th:text="${player.ladderPosition
+                                + '. ' + player.name}">
+                    </option>
+                </select>
+            </div>
 
-            <option
-                th:each="player : ${players}"
-                th:value="${player.id}"
-                th:text="${player.ladderPosition + '. ' + player.name}">
-            </option>
-        </select>
+            <div class="form-group">
+                <label for="opponentId">Opponent</label>
 
-        <br><br>
+                <select id="opponentId"
+                        name="opponentId"
+                        required>
+                    <option value="">Select an opponent</option>
 
-        <button type="submit">Send Request to Coach</button>
-    </form>
+                    <option
+                        th:each="player : ${players}"
+                        th:value="${player.id}"
+                        th:text="${player.ladderPosition
+                                + '. ' + player.name}">
+                    </option>
+                </select>
+            </div>
 
-    <p>
-        You may challenge someone ranked up to three positions above you.
-    </p>
+            <div class="action-row">
+                <button class="button" type="submit">
+                    Send Request to Coach
+                </button>
 
-    <a href="/">Back to player view</a>
+                <a class="button button-secondary" href="/">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </main>
 </body>
 </html>

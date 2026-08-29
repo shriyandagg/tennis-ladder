@@ -2,78 +2,109 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coach Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
 <body>
-    <h1>Coach Dashboard</h1>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a class="brand" href="/">Tennis Ladder</a>
 
-    <p>
-        <a href="/">Go to Player View</a>
-    </p>
-
-    <h2>Challenge Requests</h2>
-
-    <p th:if="${challenges.isEmpty()}">
-        There are no challenge requests.
-    </p>
-
-    <div th:each="challenge : ${challenges}">
-        <h3>
-            <span th:text="${challenge.challenger.name}"></span>
-            challenged
-            <span th:text="${challenge.opponent.name}"></span>
-        </h3>
-
-        <p>
-            Status:
-            <strong th:text="${challenge.status}"></strong>
-        </p>
-
-        <div th:if="${challenge.status.name()
-                == 'PENDING_COACH_APPROVAL'}">
-
-            <form
-                th:action="@{/challenges/{id}/approve(id=${challenge.id})}"
-                method="post">
-                <button type="submit">Approve</button>
-            </form>
-
-            <form
-                th:action="@{/challenges/{id}/reject(id=${challenge.id})}"
-                method="post">
-                <button type="submit">Reject</button>
-            </form>
+            <div class="nav-links">
+                <a href="/">Player Dashboard</a>
+                <a href="/challenges/new">Request Challenge</a>
+            </div>
         </div>
+    </nav>
 
-        <div th:if="${challenge.status.name() == 'APPROVED'}">
+    <main class="container">
+        <section class="hero">
+            <h1>Coach Dashboard</h1>
             <p>
-                The players may now arrange and play their match.
+                Review challenge requests and record match results.
+            </p>
+        </section>
+
+        <section class="card">
+            <div class="section-header">
+                <h2>Challenge Management</h2>
+            </div>
+
+            <p class="empty-message"
+               th:if="${challenges.isEmpty()}">
+                There are no challenge requests.
             </p>
 
-            <a
-                th:href="@{/challenges/{id}/result(id=${challenge.id})}">
-                Enter Match Result
-            </a>
-        </div>
+            <div class="challenge-item"
+                 th:each="challenge : ${challenges}">
 
-        <div th:if="${challenge.status.name() == 'REJECTED'}">
-            <p>This challenge was rejected.</p>
-        </div>
+                <p class="challenge-title">
+                    <span th:text="${challenge.challenger.name}"></span>
+                    challenged
+                    <span th:text="${challenge.opponent.name}"></span>
+                </p>
 
-        <div th:if="${challenge.status.name() == 'COMPLETED'}">
-            <p>
-                Winner:
-                <strong th:text="${challenge.winner.name}"></strong>
-            </p>
+                <p>
+                    <span class="status"
+                          th:text="${challenge.status}">
+                    </span>
+                </p>
 
-            <p>
-                Score:
-                <span th:text="${challenge.score}"></span>
-            </p>
-        </div>
+                <div class="action-row"
+                     th:if="${challenge.status.name()
+                            == 'PENDING_COACH_APPROVAL'}">
 
-        <hr>
-    </div>
+                    <form
+                        th:action="@{/challenges/{id}/approve(
+                            id=${challenge.id})}"
+                        method="post">
+
+                        <button class="button" type="submit">
+                            Approve
+                        </button>
+                    </form>
+
+                    <form
+                        th:action="@{/challenges/{id}/reject(
+                            id=${challenge.id})}"
+                        method="post">
+
+                        <button class="button button-danger" type="submit">
+                            Reject
+                        </button>
+                    </form>
+                </div>
+
+                <div th:if="${challenge.status.name() == 'APPROVED'}">
+                    <p class="match-details">
+                        Approved—the players may arrange their match.
+                    </p>
+
+                    <a class="button"
+                       th:href="@{/challenges/{id}/result(
+                            id=${challenge.id})}">
+                        Enter Result
+                    </a>
+                </div>
+
+                <div th:if="${challenge.status.name() == 'REJECTED'}">
+                    <p class="match-details">
+                        This request was rejected.
+                    </p>
+                </div>
+
+                <div th:if="${challenge.status.name() == 'COMPLETED'}">
+                    <p class="match-details">
+                        Winner:
+                        <strong th:text="${challenge.winner.name}"></strong>
+                        · Score:
+                        <strong th:text="${challenge.score}"></strong>
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
 </body>
 </html>

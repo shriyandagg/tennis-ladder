@@ -2,26 +2,54 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Player</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
-    <h1>Add Player</h1>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a class="brand" href="/">Tennis Ladder</a>
 
-    <form th:action="@{/players}" th:object="${player}" method="post">
-        <label for="name">Player name:</label>
+            <div class="nav-links">
+                <a href="/">Player Dashboard</a>
+                <a href="/coach">Coach Dashboard</a>
+            </div>
+        </div>
+    </nav>
 
-        <input
-            id="name"
-            type="text"
-            th:field="*{name}"
-            required
-        >
+    <main class="form-card card">
+        <h1>Add Player</h1>
 
-        <button type="submit">Add Player</button>
-    </form>
+        <p class="match-details">
+            New players are added to the bottom of the ladder.
+        </p>
 
-    <p>
-        <a th:href="@{/}">Back to ladder</a>
-    </p>
+        <form th:action="@{/players}"
+              th:object="${player}"
+              method="post">
+
+            <div class="form-group">
+                <label for="name">Player name</label>
+
+                <input id="name"
+                       type="text"
+                       th:field="*{name}"
+                       placeholder="Enter the player's name"
+                       required>
+            </div>
+
+            <div class="action-row">
+                <button class="button" type="submit">
+                    Add Player
+                </button>
+
+                <a class="button button-secondary" href="/">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </main>
 </body>
 </html>

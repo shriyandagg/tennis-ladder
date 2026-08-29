@@ -2,70 +2,116 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tennis Ladder</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
 <body>
-    <h1>Tennis Ladder</h1>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a class="brand" href="/">Tennis Ladder</a>
 
-    <p>
-        <a href="/challenges/new">Request a Challenge</a>
-        |
-        <a href="/coach">Coach Dashboard</a>
-    </p>
+            <div class="nav-links">
+                <a href="/challenges/new">Request Challenge</a>
+                <a href="/players/new">Add Player</a>
+                <a href="/coach">Coach Dashboard</a>
+            </div>
+        </div>
+    </nav>
 
-    <h2>Current Rankings</h2>
+    <main class="container">
+        <section class="hero">
+            <h1>Player Dashboard</h1>
+            <p>
+                View the current ladder, request matches and track results.
+            </p>
+        </section>
 
-    <ol>
-        <li th:each="player : ${players}">
-            <span th:text="${player.name}"></span>
-        </li>
-    </ol>
+        <div class="dashboard-grid">
+            <section class="card">
+                <div class="section-header">
+                    <h2>Current Rankings</h2>
 
-    <p>
-        <a href="/players/new">Add Player</a>
-    </p>
+                    <a class="button button-secondary"
+                       href="/players/new">
+                        Add Player
+                    </a>
+                </div>
 
-    <h2>Active Challenges</h2>
+                <div class="ranking-list">
+                    <div class="ranking-row"
+                         th:each="player : ${players}">
 
-    <p th:if="${activeChallenges.isEmpty()}">
-        There are no active challenges.
-    </p>
+                        <span class="rank-number"
+                              th:text="${player.ladderPosition}">
+                        </span>
 
-    <div th:each="challenge : ${activeChallenges}">
-        <p>
-            <strong th:text="${challenge.challenger.name}"></strong>
-            challenged
-            <strong th:text="${challenge.opponent.name}"></strong>
-            —
-            <span th:text="${challenge.status}"></span>
-        </p>
-    </div>
+                        <span class="player-name"
+                              th:text="${player.name}">
+                        </span>
+                    </div>
+                </div>
+            </section>
 
-    <h2>Match History</h2>
+            <section class="card">
+                <div class="section-header">
+                    <h2>Active Challenges</h2>
 
-    <p th:if="${matchHistory.isEmpty()}">
-        No matches have been completed.
-    </p>
+                    <a class="button"
+                       href="/challenges/new">
+                        New Challenge
+                    </a>
+                </div>
 
-    <div th:each="challenge : ${matchHistory}">
-        <p>
-            <strong th:text="${challenge.challenger.name}"></strong>
-            vs.
-            <strong th:text="${challenge.opponent.name}"></strong>
-        </p>
+                <p class="empty-message"
+                   th:if="${activeChallenges.isEmpty()}">
+                    There are no active challenges.
+                </p>
 
-        <p>
-            Winner:
-            <strong th:text="${challenge.winner.name}"></strong>
-        </p>
+                <div class="challenge-item"
+                     th:each="challenge : ${activeChallenges}">
 
-        <p>
-            Score:
-            <span th:text="${challenge.score}"></span>
-        </p>
+                    <p class="challenge-title">
+                        <span th:text="${challenge.challenger.name}"></span>
+                        challenged
+                        <span th:text="${challenge.opponent.name}"></span>
+                    </p>
 
-        <hr>
-    </div>
+                    <span class="status"
+                          th:text="${challenge.status}">
+                    </span>
+                </div>
+            </section>
+
+            <section class="card full-width">
+                <div class="section-header">
+                    <h2>Match History</h2>
+                </div>
+
+                <p class="empty-message"
+                   th:if="${matchHistory.isEmpty()}">
+                    No matches have been completed.
+                </p>
+
+                <div class="history-item"
+                     th:each="challenge : ${matchHistory}">
+
+                    <p class="challenge-title">
+                        <span th:text="${challenge.challenger.name}"></span>
+                        vs.
+                        <span th:text="${challenge.opponent.name}"></span>
+                    </p>
+
+                    <p class="match-details">
+                        Winner:
+                        <strong th:text="${challenge.winner.name}"></strong>
+                        · Score:
+                        <strong th:text="${challenge.score}"></strong>
+                    </p>
+                </div>
+            </section>
+        </div>
+    </main>
 </body>
 </html>
