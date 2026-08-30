@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Tournament Result</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a class="brand" href="/">Tennis Ladder</a>
+
+            <div class="nav-links">
+                <a href="/">Player Dashboard</a>
+                <a href="/coach">Coach Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="form-card card">
+        <h1>Add Tournament Result</h1>
+
+        <p class="match-details">
+            Record an outside match between any two ladder players.
+        </p>
+
+        <p class="error-message"
+           th:if="${error}"
+           th:text="${error}">
+        </p>
+
+        <form action="/coach/tournament-results" method="post">
+            <div class="form-group">
+                <label for="tournamentName">Tournament name</label>
+
+                <input id="tournamentName"
+                       name="tournamentName"
+                       type="text"
+                       placeholder="Example: Dallas Open">
+            </div>
+
+            <div class="form-group">
+                <label for="playerOneId">Player one</label>
+
+                <select id="playerOneId"
+                        name="playerOneId"
+                        required>
+                    <option value="">Select a player</option>
+
+                    <option
+                        th:each="player : ${players}"
+                        th:value="${player.id}"
+                        th:text="${player.ladderPosition
+                                + '. ' + player.name}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="playerTwoId">Player two</label>
+
+                <select id="playerTwoId"
+                        name="playerTwoId"
+                        required>
+                    <option value="">Select a player</option>
+
+                    <option
+                        th:each="player : ${players}"
+                        th:value="${player.id}"
+                        th:text="${player.ladderPosition
+                                + '. ' + player.name}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="winnerId">Winner</label>
+
+                <select id="winnerId"
+                        name="winnerId"
+                        required>
+                    <option value="">Select the winner</option>
+
+                    <option
+                        th:each="player : ${players}"
+                        th:value="${player.id}"
+                        th:text="${player.name}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="score">Final score</label>
+
+                <input id="score"
+                       name="score"
+                       type="text"
+                       placeholder="Example: 6-4, 7-5"
+                       required>
+            </div>
+
+            <div class="action-row">
+                <button class="button" type="submit">
+                    Save Tournament Result
+                </button>
+
+                <a class="button button-secondary" href="/coach">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </main>
+</body>
+</html>

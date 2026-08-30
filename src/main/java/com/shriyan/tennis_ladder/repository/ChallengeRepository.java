@@ -23,13 +23,13 @@ public interface ChallengeRepository
             List<ChallengeStatus> statuses
     );
 
-    List<Challenge> findAllByStatusNotOrderByCreatedAtDesc(
-        ChallengeStatus status
-);
+    List<Challenge> findAllByStatusInOrderByCreatedAtDesc(
+        List<ChallengeStatus> statuses
+    );
 
-List<Challenge> findAllByStatusOrderByCompletedAtDesc(
+    List<Challenge> findAllByStatusOrderByCompletedAtDesc(
         ChallengeStatus status
-);
+    );
 
 }
 

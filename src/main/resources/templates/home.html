@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Tennis Ladder</title>
+
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
@@ -23,6 +25,7 @@
     <main class="container">
         <section class="hero">
             <h1>Player Dashboard</h1>
+
             <p>
                 View the current ladder, request matches and track results.
             </p>
@@ -73,9 +76,15 @@
                      th:each="challenge : ${activeChallenges}">
 
                     <p class="challenge-title">
-                        <span th:text="${challenge.challenger.name}"></span>
+                        <span
+                            th:text="${challenge.challenger.name}">
+                        </span>
+
                         challenged
-                        <span th:text="${challenge.opponent.name}"></span>
+
+                        <span
+                            th:text="${challenge.opponent.name}">
+                        </span>
                     </p>
 
                     <span class="status"
@@ -90,24 +99,72 @@
                 </div>
 
                 <p class="empty-message"
-                   th:if="${matchHistory.isEmpty()}">
+                   th:if="${matchHistory.isEmpty()
+                           and tournamentMatches.isEmpty()}">
                     No matches have been completed.
                 </p>
 
                 <div class="history-item"
                      th:each="challenge : ${matchHistory}">
 
+                    <span class="status">
+                        Ladder Challenge
+                    </span>
+
                     <p class="challenge-title">
-                        <span th:text="${challenge.challenger.name}"></span>
+                        <span
+                            th:text="${challenge.challenger.name}">
+                        </span>
+
                         vs.
-                        <span th:text="${challenge.opponent.name}"></span>
+
+                        <span
+                            th:text="${challenge.opponent.name}">
+                        </span>
                     </p>
 
                     <p class="match-details">
                         Winner:
-                        <strong th:text="${challenge.winner.name}"></strong>
+
+                        <strong
+                            th:text="${challenge.winner.name}">
+                        </strong>
+
                         · Score:
-                        <strong th:text="${challenge.score}"></strong>
+
+                        <strong
+                            th:text="${challenge.score}">
+                        </strong>
+                    </p>
+                </div>
+
+                <div class="history-item"
+                     th:each="match : ${tournamentMatches}">
+
+                    <span class="status"
+                          th:text="${match.tournamentName}">
+                    </span>
+
+                    <p class="challenge-title">
+                        <span th:text="${match.playerOne.name}">
+                        </span>
+
+                        vs.
+
+                        <span th:text="${match.playerTwo.name}">
+                        </span>
+                    </p>
+
+                    <p class="match-details">
+                        Winner:
+
+                        <strong th:text="${match.winner.name}">
+                        </strong>
+
+                        · Score:
+
+                        <strong th:text="${match.score}">
+                        </strong>
                     </p>
                 </div>
             </section>
@@ -115,3 +172,4 @@
     </main>
 </body>
 </html>
+            
