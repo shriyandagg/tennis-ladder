@@ -246,4 +246,20 @@ select {
     .hero h1 {
         font-size: 29px;
     }
+    .logout-form {
+    margin: 0;
+}
+
+.logout-button {
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    font: inherit;
+}
+
+.logout-button:hover {
+    color: #c7f36b;
+}
 }

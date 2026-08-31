@@ -16,11 +16,18 @@
 
             <div class="nav-links">
                 <a href="/challenges/new">Request Challenge</a>
-                <a href="/players/new">Add Player</a>
-                <a href="/coach">Coach Dashboard</a>
-            </div>
+                <a th:if="${isCoach}" href="/players/new"> Add Player </a>
+                <a th:if="${isCoach}" href="/coach"> Coach Dashboard </a>
+                <form class="logout-form"
+                th:action="@{/logout}"
+                method="post">
+                <button class="logout-button" type="submit">
+                 Log Out
+             </button>
+            </form>
         </div>
-    </nav>
+     </div>
+</nav>
 
     <main class="container">
         <section class="hero">
@@ -36,7 +43,8 @@
                 <div class="section-header">
                     <h2>Current Rankings</h2>
 
-                    <a class="button button-secondary"
+                    <a th:if="${isCoach}"
+                     class="button button-secondary"
                        href="/players/new">
                         Add Player
                     </a>

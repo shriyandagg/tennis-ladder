@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In | Tennis Ladder</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <span class="brand">Tennis Ladder</span>
+        </div>
+    </nav>
+
+    <main class="form-card card">
+        <h1>Welcome Back</h1>
+
+        <p class="match-details">
+            Log in to access the tennis ladder.
+        </p>
+
+        <p class="error-message" th:if="${param.error}">
+            Incorrect username or password.
+        </p>
+
+        <p class="status" th:if="${param.logout}">
+            You have successfully logged out.
+        </p>
+
+        <form th:action="@{/login}" method="post">
+            <div class="form-group">
+                <label for="username">Username</label>
+
+                <input id="username"
+                       name="username"
+                       type="text"
+                       autocomplete="username"
+                       required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+
+                <input id="password"
+                       name="password"
+                       type="password"
+                       autocomplete="current-password"
+                       required>
+            </div>
+
+            <button class="button" type="submit">
+                Log In
+            </button>
+        </form>
+    </main>
+</body>
+</html>

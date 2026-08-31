@@ -13,6 +13,7 @@ import com.shriyan.tennis_ladder.model.Player;
 import com.shriyan.tennis_ladder.repository.ChallengeRepository;
 import com.shriyan.tennis_ladder.repository.PlayerRepository;
 import com.shriyan.tennis_ladder.repository.TournamentMatchRepository;
+import org.springframework.security.core.Authentication;
 
 @Controller
 public class HomeController {
@@ -31,7 +32,9 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String showHomePage(Model model) {
+    public String showHomePage(
+        Model model,
+        Authentication authentication) {
         model.addAttribute(
                 "players",
                 playerRepository.findAllByOrderByLadderPositionAsc()
@@ -62,6 +65,13 @@ public class HomeController {
                 tournamentMatchRepository
                         .findAllByOrderByPlayedAtDesc()
         );
+
+        boolean isCoach = authentication.getAuthorities()
+        .stream()
+        .anyMatch(authority ->
+                authority.getAuthority().equals("ROLE_COACH"));
+
+        model.addAttribute("isCoach", isCoach);
 
         return "home";
     }

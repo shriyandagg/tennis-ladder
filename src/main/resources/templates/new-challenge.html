@@ -15,6 +15,13 @@
             <div class="nav-links">
                 <a href="/">Player Dashboard</a>
                 <a href="/coach">Coach Dashboard</a>
+                <form class="logout-form"
+      th:action="@{/logout}"
+      method="post">
+    <button class="logout-button" type="submit">
+        Log Out
+    </button>
+</form>
             </div>
         </div>
     </nav>
@@ -31,7 +38,7 @@
            th:text="${error}">
         </p>
 
-        <form action="/challenges" method="post">
+        <form th:action="@{/challenges}" method="post">
             <div class="form-group">
                 <label for="challengerId">Your name</label>
 
